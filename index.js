@@ -32,9 +32,9 @@ let persons = [
   }
 ]
 
-app.get('/api/people', (request, response) => {
-  Person.find({}).then(people=> {
-    response.json(people)
+app.get('/api/persons', (request, response) => {
+  Person.find({}).then(persons=> {
+    response.json(persons)
   })
 })
 
@@ -71,29 +71,29 @@ const generateId = () => {
   return id
 }
  
-app.post('/api/persons', (req, res) => {
-  const body = req.body
+app.post('/api/persons', (request, response) => {
+  const body = request.body
 
   if (!body.name || !body.number) {
-    return res.status(400).json({
+    return response.status(400).json({
       error: 'name or number missing'
     })
   }
 
-  if (persons.find(p => p.name === body.name)) {
-    return res.status(400).json({
-      error: 'name must be unique'
-    })
-  }
+  // if (persons.find(p => p.name === body.name)) {
+  //   return response.status(400).json({
+  //     error: 'name must be unique'
+  //   })
+  // }
 
-  const person = {
+  const person = new Person({
     name: body.name,
-    number: body.number,
-    id: generateId()
-  }
+    number: body.number
+  })
 
-  persons = persons.concat(person)
-  res.json(person)
+  person.save().then(returnedPerson => {
+    response.json(returnedPerson)
+  })
 })
 
 const PORT = process.env.PORT || 3001
