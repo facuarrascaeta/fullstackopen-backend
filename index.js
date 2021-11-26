@@ -22,7 +22,7 @@ const errorHandler = (error, request, response, next) => {
 }
 
 app.get('/api/persons', (request, response) => {
-  Person.find({}).then(persons=> {
+  Person.find({}).then(persons => {
     response.json(persons)
   })
 })
@@ -54,14 +54,13 @@ app.get('/api/persons/:id', (request, response, next) => {
 
 app.delete('/api/persons/:id', (request, response, next) => {
   Person.findByIdAndRemove(request.params.id)
-  .then(result => {
-    response.status(204).end()
-  })
-  .catch(error => next(error))
+    .then(() => {
+      response.status(204).end()
+    })
+    .catch(error => next(error))
 
 })
 
- 
 app.post('/api/persons', (request, response, next) => {
   const body = request.body
 
@@ -79,11 +78,11 @@ app.post('/api/persons', (request, response, next) => {
   person.save().then(returnedPerson => {
     response.status(201).json(returnedPerson)
   })
-  .catch(error => next(error))
+    .catch(error => next(error))
 })
 
 app.put('/api/persons/:id', (request, response, next) => {
-  body = request.body
+  const body = request.body
 
   const person = {
     number: body.number
